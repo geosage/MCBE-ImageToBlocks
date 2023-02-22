@@ -47,3 +47,4 @@ for image, avg_color in avg_colors.items():
 closest_image = min(distances, key=distances.get)
 
 print(closest_image)
+print("test")
