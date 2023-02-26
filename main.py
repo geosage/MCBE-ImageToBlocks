@@ -46,4 +46,8 @@ for image, avg_color in avg_colors.items():
 # Find the filename of the image with the closest average color
 closest_image = min(distances, key=distances.get)
 
+<<<<<<< HEAD
 print(closest_image)
+=======
+print(closest_image)
+>>>>>>> 84a10659d5f53dd9cd451b2ea5e85efe24bd4207
