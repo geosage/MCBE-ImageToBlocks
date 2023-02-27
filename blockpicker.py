@@ -32,7 +32,7 @@ else:
         pickle.dump(avg_colors, f)
 
 # Calculate the average color of the query image
-query_image = "yes.png"
+query_image = "mainimage.jpg"
 query_color = get_avg_color(query_image)
 
 # Compare the average color of the query image to the average colors of the other images
