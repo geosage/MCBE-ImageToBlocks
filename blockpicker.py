@@ -27,6 +27,8 @@ def get_closest_image(imagestoprocess):
             img = Image.open(os.path.join(blocks_dir, image))
             avg_color = get_avg_color(img)
             avg_colors[image] = avg_color
+            img.close()  # Close the file
+
         with open(data_file, "wb") as f:
             pickle.dump(avg_colors, f)
 
@@ -53,6 +55,5 @@ def get_closest_image(imagestoprocess):
         # Replace the query image with the closest image
         processed_images.append(Image.open(os.path.join(blocks_dir, closest_image)))
 
+
     return processed_images
-
-
