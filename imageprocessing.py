@@ -42,14 +42,11 @@ def resize_image(image_path, target_size):
 
 resized_img = resize_image(filepath, (pixelsperblock, pixelsperblock))
 
-if resized_img.format == 'PNG':
-    bg = Image.new('RGBA', resized_img.size, (255, 255, 255, 255))
-    bg.paste(resized_img, mask=resized_img.split()[3])
-    bg = bg.convert('RGB')
-    bg.save('resizedimage.jpg')
-else:
-    resized_img = resized_img.convert('RGB')
-    resized_img.save('resizedimage.jpg')
+
+bg = Image.new('RGBA', resized_img.size, (255, 255, 255, 255))
+bg.paste(resized_img, mask=resized_img.split()[3])
+bg = bg.convert('RGB')
+bg.save('resizedimage.jpg')
 
 print("Original image dimensions:", height, "x", width)
 print("Resized image dimensions:", resized_img.height, "x", resized_img.width)
@@ -65,24 +62,29 @@ def split_image(image_path, block_size):
         images = []
         for x in range(0, width, block_size):
             for y in range(0, height, block_size):
-                box = (x, y, x+block_size, y+block_size)
+                box = (y, x, y+block_size, x+block_size)
                 images.append(img.crop(box))
     return images
 
 imagestoprocess = split_image('resizedimage.jpg', pixelsperblock)
+print('There are ' + str(len(imagestoprocess)) + ' images currently being processed.')
 
 def combine_images(images, block_size):
-    width = block_size * math.ceil(math.sqrt(len(images)))
-    height = width
+    num_images = len(images)
+    rows = int(math.ceil(math.sqrt(num_images)))
+    cols = int(math.ceil(num_images / rows))
+    width = cols * block_size
+    height = rows * block_size
 
-    new_image = Image.new('RGBA', (width, height), (255, 255, 255, 0))
+    new_image = Image.new('RGB', (width, height), (255, 255, 255, 0))
 
     for i, image in enumerate(images):
-        x = (i * block_size) % width
-        y = (i * block_size) // width * block_size
+        x = (i % cols) * block_size
+        y = (i // cols) * block_size
         new_image.paste(image, (x, y))
 
     return new_image
 
+
 feez = combine_images(imagestoprocess, pixelsperblock)
-feez.save('joe.png')
+feez.save('joe.jpg')
