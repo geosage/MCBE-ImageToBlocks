@@ -41,14 +41,10 @@ def resize_image(image_path, target_size):
 
 resized_img = resize_image(filepath, (pixelsperblock, pixelsperblock))
 
-if resized_img.format == 'PNG':
-    bg = Image.new('RGBA', resized_img.size, (255, 255, 255, 255))
-    bg.paste(resized_img, mask=resized_img.split()[3])
-    bg = bg.convert('RGB')
-    bg.save('resizedimage.jpg')
-else:
-    resized_img = resized_img.convert('RGB')
-    resized_img.save('resizedimage.jpg')
+bg = Image.new('RGBA', resized_img.size, (255, 255, 255, 255))
+bg.paste(resized_img, mask=resized_img.split()[3])
+bg = bg.convert('RGB')
+bg.save('resizedimage.jpg')
 
 
 print("Original image dimensions:", height, "x", width)
