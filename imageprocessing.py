@@ -68,10 +68,11 @@ def split_image(image_path, block_size):
         for x in range(0, width, block_size):
             for y in range(0, height, block_size):
                 box = (y, x, y+block_size, x+block_size)
-                images.append(img.crop(box))
+                images.append(img.crop(box).resize((16, 16)))
     return images
 
-def combine_images(images, block_size):
+def combine_images(images):
+    block_size = 16
     num_images = len(images)
     rows = int(math.ceil(math.sqrt(num_images)))
     cols = int(math.ceil(num_images / rows))

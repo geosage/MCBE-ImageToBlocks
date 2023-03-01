@@ -8,10 +8,10 @@ pixelsperblock = resize_and_save_image(maxheight)
 imagestoprocess = split_image('resizedimage.jpg', pixelsperblock)
 print(str(len(imagestoprocess)) + ' images are being processed.')
 
-#processedimages = get_closest_image(imagestoprocess)
+processedimages = get_closest_image(imagestoprocess)
 
 
-feez = combine_images(imagestoprocess, pixelsperblock)
+feez = combine_images(processedimages)
 feez.save('deez.jpg')
 
 
