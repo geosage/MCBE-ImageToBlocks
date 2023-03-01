@@ -11,6 +11,7 @@ print(str(len(imagestoprocess) * len(imagestoprocess[0])) + ' images are being p
 processedimages = get_closest_image(imagestoprocess)
 
 feez = combine_images(processedimages)
-feez.save('deez.jpg')
+feez.save('finalimage.jpg')
+feez.show()
 
 

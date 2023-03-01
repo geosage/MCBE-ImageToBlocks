@@ -83,11 +83,12 @@ def split_image(image_path, size):
     # Return 2D array of sub-images
     return sub_images
 
+
 from PIL import Image
 import numpy as np
 
 def combine_images(sub_images):
-    sub_image_size = sub_images[0][0].size[0]
+    sub_image_size = sub_images[0][0].size[1]
     num_rows, num_cols = len(sub_images), len(sub_images[0])
     combined_image = Image.new('RGB', (num_cols * sub_image_size, num_rows * sub_image_size))
 
@@ -99,21 +100,6 @@ def combine_images(sub_images):
     return combined_image
 
 
-#Do this shit in 2D Arrays, With the rows being inside the columns in the array
-
-#Also, for blockpicker go thru the 2D Array and just replace the items in list 
-
-#e.g.
-
-#from array import *
-#T = [[11, 12, 5, 2], [15, 6,10], [10, 8, 12, 5], [12,15,8,6]]
-#
-#del T[3]
-#
-#for r in T:
-#   for c in r:
-#       print(c,end = " ")
-#   print()
 
 
 

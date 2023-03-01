@@ -14,6 +14,7 @@ def get_avg_color(image):
     return avg_color
 
 def get_closest_image(imagestoprocess):
+    b = 1
     blocks_dir = 'blocks'
 
     # Check if the average color data file exists
@@ -26,14 +27,17 @@ def get_closest_image(imagestoprocess):
         # If the data file does not exist, calculate the average color of each image and save the data
         images = os.listdir(blocks_dir)
         avg_colors = {}
-        for image in images:
+        for i, image in enumerate(images):
             img = Image.open(os.path.join(blocks_dir, image))
             avg_color = get_avg_color(img)
             avg_colors[image] = avg_color
-            img.close()  # Close the file
+            img.close()  # Close the file after processing
 
-        with open(data_file, "wb") as f:
-            pickle.dump(avg_colors, f)
+        if (i + 1) % len(images) == 0:
+            with open(data_file, "wb") as f:
+                pickle.dump(avg_colors, f)
+            avg_colors = {}
+
 
     processed_images = []
     for row in imagestoprocess:
@@ -48,18 +52,30 @@ def get_closest_image(imagestoprocess):
             # Calculate the average color of the query image
             query_color = get_avg_color(query_image)
 
-            # Compare the average color of the query image to the average colors of the other images
+            #Compare the average color of the query image to the average colors of the other images
             distances = {}
             for image_name, avg_color in avg_colors.items():
                 dist = np.linalg.norm(query_color - avg_color)
                 distances[image_name] = dist
 
-            # Find the filename of the image with the closest average color
+             # Find the filename of the image with the closest average color
             closest_image = min(distances, key=distances.get)
 
             # Replace the query image with the closest image
-            row_images.append(Image.open(os.path.join(blocks_dir, closest_image)))
+            with Image.open(os.path.join(blocks_dir, closest_image)) as closest_img:
+                row_images.append(closest_img.copy())
+
+
+
+            # Close the query image
+            query_image.close()
+
 
         processed_images.append(row_images)
+
+        print("Processed " + str(b) + "/" + str(len(imagestoprocess)) + " Rows")
+        b += 1
+
+    # Close any remaining images
 
     return processed_images
