@@ -12,6 +12,8 @@ processedimages = get_closest_image(imagestoprocess)
 
 feez = combine_images(processedimages)
 feez.save('finalimage.jpg')
-feez.show()
+
+os.startfile('finalimage.jpg')
+
 
 
