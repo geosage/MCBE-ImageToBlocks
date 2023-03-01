@@ -7,7 +7,10 @@ def get_avg_color(image):
     img = np.array(image)
     img = img.astype(np.float32) / 255.0  # Normalize pixel values to the range [0, 1]
     avg_color = np.mean(img, axis=(0, 1))
-    avg_color = avg_color[:3]  # Take the first three elements of avg_color
+    if isinstance(avg_color, np.ndarray):
+        avg_color = avg_color[:3]  # Take the first three elements of avg_color
+    else:
+        avg_color = np.array([avg_color, avg_color, avg_color])  # Create a numpy array with three identical elements
     return avg_color
 
 def get_closest_image(imagestoprocess):
@@ -33,27 +36,30 @@ def get_closest_image(imagestoprocess):
             pickle.dump(avg_colors, f)
 
     processed_images = []
-    for image in imagestoprocess:
-        # Convert the query image from a list to a NumPy array
-        query_image = np.array(image, dtype=np.uint8)
+    for row in imagestoprocess:
+        row_images = []
+        for image in row:
+            # Convert the query image from a list to a NumPy array
+            query_image = np.array(image, dtype=np.uint8)
 
-        # Convert the NumPy array to a PIL Image object
-        query_image = Image.fromarray(query_image)
+            # Convert the NumPy array to a PIL Image object
+            query_image = Image.fromarray(query_image)
 
-        # Calculate the average color of the query image
-        query_color = get_avg_color(query_image)
+            # Calculate the average color of the query image
+            query_color = get_avg_color(query_image)
 
-        # Compare the average color of the query image to the average colors of the other images
-        distances = {}
-        for image_name, avg_color in avg_colors.items():
-            dist = np.linalg.norm(query_color - avg_color)
-            distances[image_name] = dist
+            # Compare the average color of the query image to the average colors of the other images
+            distances = {}
+            for image_name, avg_color in avg_colors.items():
+                dist = np.linalg.norm(query_color - avg_color)
+                distances[image_name] = dist
 
-        # Find the filename of the image with the closest average color
-        closest_image = min(distances, key=distances.get)
+            # Find the filename of the image with the closest average color
+            closest_image = min(distances, key=distances.get)
 
-        # Replace the query image with the closest image
-        processed_images.append(Image.open(os.path.join(blocks_dir, closest_image)))
+            # Replace the query image with the closest image
+            row_images.append(Image.open(os.path.join(blocks_dir, closest_image)))
 
+        processed_images.append(row_images)
 
     return processed_images

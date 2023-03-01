@@ -1,5 +1,6 @@
 from PIL import Image
 import math
+import numpy as np
 
 def resize_and_save_image(height_limit):
     filepath = "mainimage.png"
@@ -61,29 +62,61 @@ def resize_and_save_image(height_limit):
 #Image Split And Combine
 #-------------------------------------------------------------------------------------------
 
-def split_image(image_path, block_size):
-    with Image.open(image_path) as img:
-        width, height = img.size
-        images = []
-        for x in range(0, width, block_size):
-            for y in range(0, height, block_size):
-                box = (y, x, y+block_size, x+block_size)
-                images.append(img.crop(box).resize((16, 16)))
-    return images
+def split_image(image_path, size):
+    # Open image and convert to numpy array
+    img = Image.open(image_path)
+    img_array = np.array(img)
 
-def combine_images(images):
-    block_size = 16
-    num_images = len(images)
-    rows = int(math.ceil(math.sqrt(num_images)))
-    cols = int(math.ceil(num_images / rows))
-    width = cols * block_size
-    height = rows * block_size
+    # Calculate number of rows and columns needed to split image into size*size sub-images
+    rows = img_array.shape[0] // size
+    cols = img_array.shape[1] // size
 
-    new_image = Image.new('RGB', (width, height), (255, 255, 255, 0))
+    # Initialize 2D array to hold sub-images
+    sub_images = np.empty((rows, cols), dtype=object)
 
-    for i, image in enumerate(images):
-        x = (i % cols) * block_size
-        y = (i // cols) * block_size
-        new_image.paste(image, (x, y))
+    # Split image into sub-images and store in 2D array
+    for i in range(rows):
+        for j in range(cols):
+            sub_image = img_array[i*size:(i+1)*size, j*size:(j+1)*size]
+            sub_images[i][j] = sub_image
 
-    return new_image
+    # Return 2D array of sub-images
+    return sub_images
+
+from PIL import Image
+import numpy as np
+
+def combine_images(sub_images):
+    sub_image_size = sub_images[0][0].size[0]
+    num_rows, num_cols = len(sub_images), len(sub_images[0])
+    combined_image = Image.new('RGB', (num_cols * sub_image_size, num_rows * sub_image_size))
+
+    for row_idx in range(num_rows):
+        for col_idx in range(num_cols):
+            sub_image = sub_images[row_idx][col_idx]
+            combined_image.paste(sub_image, (col_idx * sub_image_size, row_idx * sub_image_size))
+
+    return combined_image
+
+
+#Do this shit in 2D Arrays, With the rows being inside the columns in the array
+
+#Also, for blockpicker go thru the 2D Array and just replace the items in list 
+
+#e.g.
+
+#from array import *
+#T = [[11, 12, 5, 2], [15, 6,10], [10, 8, 12, 5], [12,15,8,6]]
+#
+#del T[3]
+#
+#for r in T:
+#   for c in r:
+#       print(c,end = " ")
+#   print()
+
+
+
+
+
+
