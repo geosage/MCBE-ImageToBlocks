@@ -38,7 +38,7 @@ def get_closest_image(imagestoprocess):
                 pickle.dump(avg_colors, f)
             avg_colors = {}
 
-
+    imagenames = []
     processed_images = []
     for row in imagestoprocess:
         row_images = []
@@ -60,6 +60,7 @@ def get_closest_image(imagestoprocess):
 
              # Find the filename of the image with the closest average color
             closest_image = min(distances, key=distances.get)
+            imagenames.append(closest_image)
 
             # Replace the query image with the closest image
             with Image.open(os.path.join(blocks_dir, closest_image)) as closest_img:
@@ -76,6 +77,5 @@ def get_closest_image(imagestoprocess):
         print("Processed " + str(b) + "/" + str(len(imagestoprocess)) + " Rows")
         b += 1
 
-    # Close any remaining images
-
+    print(imagenames)
     return processed_images
