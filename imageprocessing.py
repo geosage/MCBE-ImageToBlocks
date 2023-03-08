@@ -81,8 +81,7 @@ def split_image(image_path, size):
             sub_images[i][j] = sub_image
 
     # Return 2D array of sub-images
-    return sub_images
-
+    return sub_images, cols
 
 from PIL import Image
 import numpy as np
