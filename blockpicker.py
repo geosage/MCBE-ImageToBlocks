@@ -78,4 +78,5 @@ def get_closest_image(imagestoprocess):
         b += 1
 
     print(imagenames)
+    print("Finished!")
     return processed_images
