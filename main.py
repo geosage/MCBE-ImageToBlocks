@@ -18,4 +18,4 @@ print(str(columns) + ' Columns')
 os.startfile('finalimage.jpg')
 
 
-
+#lol
