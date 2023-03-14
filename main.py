@@ -30,11 +30,12 @@ pixelsperblock = resize_and_save_image(maxheight)
 imagestoprocess, columns = split_image('resizedimage.jpg', pixelsperblock)
 print(str(len(imagestoprocess) * len(imagestoprocess[0])) + ' images are being processed.')
 
+imagesnum = len(imagestoprocess) * len(imagestoprocess[0])
 #Get Closest Images
 processedimages, imagenames = get_closest_image(imagestoprocess)
 
 #Combine and Save Images
-feez = combine_images(processedimages)
+feez, num_rows, num_cols = combine_images(processedimages)
 feez.save('finalimage.jpg')
 print(imagenames)
 print(str(columns) + ' Columns')
@@ -46,7 +47,7 @@ os.startfile('finalimage.jpg')
 wantimport = str(input("Your final image has been opened. Do you want to import it? (Yes/No)")).lower()
 while importquestion == True:
     if wantimport == "yes":
-        joe = mcbeimage(imagenames, columns)
+        joe = mcbeimage(imagenames, num_cols, num_rows)
         importquestion = False
     elif wantimport == "no":
         quit()
