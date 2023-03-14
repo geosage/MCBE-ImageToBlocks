@@ -83,9 +83,6 @@ def split_image(image_path, size):
     # Return 2D array of sub-images
     return sub_images, cols
 
-from PIL import Image
-import numpy as np
-
 def combine_images(sub_images):
     sub_image_size = sub_images[0][0].size[1]
     num_rows, num_cols = len(sub_images), len(sub_images[0])
