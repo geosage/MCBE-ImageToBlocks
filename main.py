@@ -47,7 +47,7 @@ os.startfile('finalimage.jpg')
 wantimport = str(input("Your final image has been opened. Do you want to import it? (Yes/No)")).lower()
 while importquestion == True:
     if wantimport == "yes":
-        joe = mcbeimage(imagenames, num_cols, num_rows)
+        joe = mcbequestion(imagenames, num_cols, num_rows)
         importquestion = False
     elif wantimport == "no":
         quit()

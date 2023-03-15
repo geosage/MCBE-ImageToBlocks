@@ -1,10 +1,29 @@
-check = True
+
 
 
 #This will generate the commands for the other methods
-def commandgen():
+def commandgen(imagenames):
+    count = 0
     print("Generate commands here")
+    for i in imagenames:
+        i = i.replace('.png', '')
+        if i[:9] == "concrete ":
+            a = i.split()
+            b = a[1]
+            i = f'concrete ["color":"{b}"]'
+        elif i[:9] == "concrete_":
+            a = i.split()
+            b = a[1]
+            i = f'concrete_powder ["color":"{b}"]'
+        elif i[:9] == "stained_h":
+            a = i.split()
+            b = a[1]
+            i = f'stained_hardened_clay ["color":"{b}"]'
 
+        imagenames[count] = i
+        count += 1
+
+    print(imagenames)
 
 #Typing the commands into their chat
 def fillgen():
@@ -17,13 +36,16 @@ def functiongen():
 
 
 #This will ask which import type they want
-def mcbequestion():
+def mcbequestion(imagenames, num_cols, num_rows):
+    commandgen(imagenames)
     importtype = input("How would you like to import?\n[1]: mcfunction\n[2]: fill commands")
+
+    check = True
     while check == True:
-        if importtype == 1:
+        if importtype == "1":
             functiongen()
             check = False
-        if importtype == 2:
+        elif importtype == "2":
             fillgen()
             check = False
         else:
