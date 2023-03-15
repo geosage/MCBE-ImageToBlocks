@@ -38,7 +38,7 @@ def functiongen():
 #This will ask which import type they want
 def mcbequestion(imagenames, num_cols, num_rows):
     commandgen(imagenames)
-    importtype = input("How would you like to import?\n[1]: mcfunction\n[2]: fill commands")
+    importtype = input("How would you like to import?\n[1]: mcfunction\n[2]: fill commands\n")
 
     check = True
     while check == True:
