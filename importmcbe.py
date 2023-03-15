@@ -1,14 +1,33 @@
-def mcbeimage(imagenames, num_cols, num_rows):
-    blockrows = []
-    col_idx = 0
-    row_idx = 0
-    for i in range(len(imagenames)):
-        print(row_idx)
-        if col_idx != num_cols:
-            blockrows[row_idx].append(imagenames[i])
-            col_idx = col_idx + 1
-        else:
-            row_idx = row_idx + 1
-            col_idx = 0
+check = True
 
-    print(blockrows)
+
+#This will generate the commands for the other methods
+def commandgen():
+    print("Generate commands here")
+
+
+#Typing the commands into their chat
+def fillgen():
+    print("This will type it into their chat")
+
+
+#This will turn the commands into an mcfunction
+def functiongen():
+    print("This will generate an mcfunction")
+
+
+#This will ask which import type they want
+def mcbequestion():
+    importtype = input("How would you like to import?\n[1]: mcfunction\n[2]: fill commands")
+    while check == True:
+        if importtype == 1:
+            functiongen()
+            check = False
+        if importtype == 2:
+            fillgen()
+            check = False
+        else:
+            importtype = input("Please pick 1 or 2.")
+
+
+
