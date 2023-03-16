@@ -25,14 +25,15 @@ def commandgen(imagenames):
 
     print(imagenames)
 
-#Typing the commands into their chat
-def fillgen():
-    print("This will type it into their chat")
-
 
 #This will turn the commands into an mcfunction
 def functiongen():
     print("This will generate an mcfunction")
+
+
+#Typing the commands into their chat
+def fillgen():
+    print("This will type it into their chat")
 
 
 #This will ask which import type they want
