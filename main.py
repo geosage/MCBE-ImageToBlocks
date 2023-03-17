@@ -37,7 +37,7 @@ processedimages, imagenames = get_closest_image(imagestoprocess)
 #Combine and Save Images
 feez, num_rows, num_cols = combine_images(processedimages)
 feez.save('finalimage.jpg')
-print(imagenames)
+
 print(str(columns) + ' Columns')
 
 #Open Image
