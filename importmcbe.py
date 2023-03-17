@@ -1,6 +1,3 @@
-
-
-
 #This will generate the commands for the other methods
 def commandgen(imagenames):
     count = 0
@@ -45,7 +42,9 @@ def commandgen(imagenames):
         imagenames[count] = i
         count += 1
 
+    imagenames = list(reversed(imagenames))
     print(imagenames)
+    return imagenames
 
 #Typing the commands into their chat
 def fillgen():
