@@ -45,10 +45,7 @@ def commandgen(imagenames):
         imagenames[count] = i
         count += 1
 
-    imagenames.reverse()
     print(imagenames)
-    return imagenames
-
 
 #Typing the commands into their chat
 def fillgen():
@@ -58,6 +55,11 @@ def fillgen():
 #This will turn the commands into an mcfunction
 def functiongen():
     print("This will generate an mcfunction")
+
+
+#Typing the commands into their chat
+def commandfill():
+    print("This will type it into their chat")
 
 
 #This will ask which import type they want
@@ -71,7 +73,7 @@ def mcbequestion(imagenames, num_cols, num_rows):
             functiongen()
             check = False
         elif importtype == "2":
-            fillgen()
+            commandfill()
             check = False
         else:
             importtype = input("Please pick 1 or 2.")
