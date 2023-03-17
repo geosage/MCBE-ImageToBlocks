@@ -19,11 +19,36 @@ def commandgen(imagenames):
             a = i.split()
             b = a[1]
             i = f'stained_hardened_clay ["color":"{b}"]'
+        elif i[:3] == "log":
+            a = i.split()
+            b = a[1]
+            i = f'wood ["wood_type":"{b}"]'
+        elif i[:6] == "planks":
+            a = i.split()
+            b = a[1]
+            i = f'planks ["wood_type":"{b}"]'
+        elif i[:5] == "dpris":
+            i = f'prismarine ["prismarine_block_type":"dark"]'
+        elif i[:7] == "redsand":
+            a = i.split()
+            b = a[1]
+            i = f'red_sandstone ["sand_stone_type":"{b}"]'
+        elif i[:9] == "fsandstone":
+            a = i.split()
+            b = a[1]
+            i = f'sandstone ["sand_stone_type":"{b}"]'
+        elif i[:6] == "stonef":
+            a = i.split()
+            b = a[1]
+            i = f'stone ["stone_type":"{b}"]'
 
         imagenames[count] = i
         count += 1
 
+    imagenames.reverse()
     print(imagenames)
+    return imagenames
+
 
 #Typing the commands into their chat
 def fillgen():
@@ -37,7 +62,7 @@ def functiongen():
 
 #This will ask which import type they want
 def mcbequestion(imagenames, num_cols, num_rows):
-    commandgen(imagenames)
+    imagenames = commandgen(imagenames)
     importtype = input("How would you like to import?\n[1]: mcfunction\n[2]: fill commands\n")
 
     check = True
