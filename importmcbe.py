@@ -1,5 +1,8 @@
-#This will generate the commands for the other methods
-def commandgen(imagenames):
+import pyautogui
+import time
+
+#This will generate the block names for the other methods
+def blockgen(imagenames):
     count = 0
     print("Generate commands here")
     for i in imagenames:
@@ -43,12 +46,29 @@ def commandgen(imagenames):
         count += 1
 
     imagenames = list(reversed(imagenames))
-    print(imagenames)
+
     return imagenames
 
-#Typing the commands into their chat
-def fillgen():
-    print("This will type it into their chat")
+
+def commandgen(imagenames, num_cols):
+    column = num_cols
+    row = 0
+    commands = []
+
+    commands.append(f'tickingarea add ~ ~ ~ ~ ~ ~{num_cols} imageimport')
+    for i in imagenames:
+        i = f'fill ~ ~{row} ~{column} ~ ~{row} ~{column} {i}'
+        if column == 1:
+            column = num_cols
+            print(num_cols)
+            row += 1
+        else:
+            column -= 1
+        commands.append(i)
+    
+    commands.append(f'tickingarea remove imageimport')
+
+    return commands
 
 
 #This will turn the commands into an mcfunction
@@ -57,13 +77,27 @@ def functiongen():
 
 
 #Typing the commands into their chat
-def commandfill():
-    print("This will type it into their chat")
+def commandfill(commands):
+    print("Please open your minecraft...\nCommands will begin to be typed in 5 seconds.")
+    time.sleep(5)
+    a = 1
+    for i in commands:
+        print(f'Filled {a} block(s)')
+        time.sleep(1)
+        pyautogui.press('/')
+        time.sleep(0.05)
+        pyautogui.typewrite(i, interval=0.05)
+        time.sleep(0.05)
+        pyautogui.press('enter')
+        a += 1
+    print("Successfully entered commands!")
 
 
 #This will ask which import type they want
-def mcbequestion(imagenames, num_cols, num_rows):
-    imagenames = commandgen(imagenames)
+def mcbequestion(imagenames, num_cols):
+    imagenames = blockgen(imagenames)
+    commands = commandgen(imagenames, num_cols)
+    print(commands)
     importtype = input("How would you like to import?\n[1]: mcfunction\n[2]: fill commands\n")
 
     check = True
@@ -72,7 +106,7 @@ def mcbequestion(imagenames, num_cols, num_rows):
             functiongen()
             check = False
         elif importtype == "2":
-            commandfill()
+            commandfill(commands)
             check = False
         else:
             importtype = input("Please pick 1 or 2.")
