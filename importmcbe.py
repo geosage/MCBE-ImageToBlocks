@@ -1,5 +1,8 @@
 import pyautogui
 import time
+import os
+import json
+import uuid
 
 #This will generate the block names for the other methods
 def blockgen(imagenames):
@@ -33,7 +36,7 @@ def blockgen(imagenames):
             a = i.split()
             b = a[1]
             i = f'red_sandstone ["sand_stone_type":"{b}"]'
-        elif i[:9] == "fsandstone":
+        elif i[:10] == "fsandstone":
             a = i.split()
             b = a[1]
             i = f'sandstone ["sand_stone_type":"{b}"]'
@@ -70,10 +73,63 @@ def commandgen(imagenames, num_cols):
 
     return commands
 
+def makemanifest(mainfilename):
+    name = mainfilename + ' IMG Generator'
+    uuid1 = str(uuid.uuid4())
+    uuid2 = str(uuid.uuid4())
+    manifestcontent = {
+        "format_version": 2,
+        "header": {
+            "description": 'Created by groege#6236',
+            "name": name,
+            "uuid": str(uuid1),
+            "version": [1, 0, 0],
+            "min_engine_version": [1, 16, 0]
+        },
+        "modules": [
+            {
+                "description": 'Created by groege#6236',
+                "type": "data",
+                "uuid": str(uuid2),
+                "version": [1, 0, 0]
+            }
+        ]
+    }
+    return manifestcontent
+
+
 
 #This will turn the commands into an mcfunction
-def functiongen():
-    print("This will generate an mcfunction")
+def functiongen(mainfilename, commands, max_commands_per_file=9750):
+    # Make the folders and manifest
+    new_folder_path = os.path.join('functionpacks/', mainfilename)
+    if not os.path.exists(new_folder_path):
+        os.makedirs(new_folder_path)
+    manifestcontent = makemanifest(mainfilename)
+    file_path = os.path.join(new_folder_path, 'manifest.json')
+    with open(file_path, "w") as f:
+        json.dump(manifestcontent, f, indent=2)
+    folder_path = os.path.join(new_folder_path, 'functions')
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+
+    # Write the commands to one or more function files
+    num_files = len(commands) // max_commands_per_file + 1
+    for i in range(num_files):
+        # Create a new function file with a suffix if needed
+        filename = f"{mainfilename}_{i}.mcfunction"
+        file_path = os.path.join(folder_path, filename)
+        
+        # Write up to max_commands_per_file commands to the file
+        start_idx = i * max_commands_per_file
+        end_idx = (i + 1) * max_commands_per_file
+        with open(file_path, "w") as f:
+            for command in commands[start_idx:end_idx]:
+                f.write(command + "\n")
+
+    
+    print("The mcfunction file has been generated.")
+
 
 
 #Typing the commands into their chat
@@ -94,16 +150,15 @@ def commandfill(commands):
 
 
 #This will ask which import type they want
-def mcbequestion(imagenames, num_cols):
+def mcbequestion(imagenames, num_cols, mainfilename):
     imagenames = blockgen(imagenames)
     commands = commandgen(imagenames, num_cols)
-    print(commands)
-    importtype = input("How would you like to import?\n[1]: mcfunction\n[2]: fill commands\n")
+    importtype = input("How would you like to import?\n[1]: mcfunction\n[2]: fill commands (this takes a long time)\n")
 
     check = True
     while check == True:
         if importtype == "1":
-            functiongen()
+            functiongen(mainfilename, commands)
             check = False
         elif importtype == "2":
             commandfill(commands)

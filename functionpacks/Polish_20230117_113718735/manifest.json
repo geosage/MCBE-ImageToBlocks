@@ -1,0 +1,30 @@
+{
+  "format_version": 2,
+  "header": {
+    "description": "\u00a7aCreated by \u00a7bgroege#6236",
+    "name": "Polish_20230117_113718735 IMG Generator",
+    "uuid": "3bc3cde5-e4de-4fe9-af3c-0b968871ad8b",
+    "version": [
+      1,
+      0,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      16,
+      0
+    ]
+  },
+  "modules": [
+    {
+      "description": "\u00a7aCreated by \u00a7bgroege#6236",
+      "type": "data",
+      "uuid": "60af61f4-8170-451f-bed9-84005bdf0998",
+      "version": [
+        1,
+        0,
+        0
+      ]
+    }
+  ]
+}

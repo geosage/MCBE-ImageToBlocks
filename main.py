@@ -13,13 +13,22 @@ root.withdraw()
 file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.png;*.gif;*.bmp")])
 
 if file_path:
+    # Get the filename of the selected image
+    selected_filename = os.path.basename(file_path)
+    
+    # Get the base name of the selected image (without the extension)
+    selected_basename = os.path.splitext(selected_filename)[0]
+    
+    # Open the image
     with Image.open(file_path) as img:
-            img.save(f"mainimage.png")
-            print("Successfully uploaded image")
+        # Save the image as mainimage.png
+        img.save(f"mainimage.png")
+        print(f"Successfully uploaded image '{selected_basename}'")
 else:
     print("No file selected")
 #------------------------------------------
 
+print(selected_basename)
 
 maxheight = 320
 q = 1
@@ -47,7 +56,7 @@ os.startfile('finalimage.jpg')
 wantimport = str(input("Your final image has been opened. Do you want to import it? (Yes/No)")).lower()
 while importquestion == True:
     if wantimport == "yes":
-        joe = mcbequestion(imagenames, num_cols)
+        joe = mcbequestion(imagenames, num_cols, selected_basename)
         importquestion = False
     elif wantimport == "no":
         quit()
