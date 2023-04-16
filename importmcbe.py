@@ -165,6 +165,3 @@ def mcbequestion(imagenames, num_cols, mainfilename):
             check = False
         else:
             importtype = input("Please pick 1 or 2.")
-
-
-

@@ -66,7 +66,7 @@ def get_closest_image(imagestoprocess):
             with Image.open(os.path.join(blocks_dir, closest_image)) as closest_img:
                 row_images.append(closest_img.copy())
 
-
+            #BASICALLY THIS CODE ^^^^^ NEEDS THE IMAGES... THE REST OF IT DOESNT!
 
             # Close the query image
             query_image.close()
