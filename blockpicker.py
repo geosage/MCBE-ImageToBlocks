@@ -21,7 +21,7 @@ def get_closest_image(imagestoprocess):
     data_file = os.path.join(blocks_dir, "average_colors.pkl")
     if os.path.isfile(data_file):
         # If the data file exists, load the average color data
-        with open(data_file, "rb") as f:
+        with open(data_file, "rb", buffering=1024*1024) as f:
             avg_colors = pickle.load(f)
     else:
         # If the data file does not exist, calculate the average color of each image and save the data
@@ -34,7 +34,7 @@ def get_closest_image(imagestoprocess):
             img.close()  # Close the file after processing
 
         if (i + 1) % len(images) == 0:
-            with open(data_file, "wb") as f:
+            with open(data_file, "wb", buffering=1024*1024) as f:
                 pickle.dump(avg_colors, f)
             avg_colors = {}
 
@@ -58,7 +58,7 @@ def get_closest_image(imagestoprocess):
                 dist = np.linalg.norm(query_color - avg_color)
                 distances[image_name] = dist
 
-             # Find the filename of the image with the closest average color
+            # Find the filename of the image with the closest average color
             closest_image = min(distances, key=distances.get)
             imagenames.append(closest_image)
 

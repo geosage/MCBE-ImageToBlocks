@@ -41,7 +41,6 @@ print(str(len(imagestoprocess) * len(imagestoprocess[0])) + ' images are being p
 
 imagesnum = len(imagestoprocess) * len(imagestoprocess[0])
 
-
 #Get Closest Images
 processedimages, imagenames = get_closest_image(imagestoprocess)
 
