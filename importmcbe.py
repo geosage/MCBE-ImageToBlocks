@@ -7,7 +7,6 @@ import uuid
 #This will generate the block names for the other methods
 def blockgen(imagenames):
     count = 0
-    print("Generate commands here")
     for i in imagenames:
         i = i.replace('.png', '')
         if i[:9] == "concrete ":
@@ -52,7 +51,7 @@ def blockgen(imagenames):
 
     return imagenames
 
-
+#Makes the list of commands and appends it to the list "commands"
 def commandgen(imagenames, num_cols):
     column = num_cols
     row = 0
@@ -63,7 +62,6 @@ def commandgen(imagenames, num_cols):
         i = f'fill ~ ~{row} ~{column} ~ ~{row} ~{column} {i}'
         if column == 1:
             column = num_cols
-            print(num_cols)
             row += 1
         else:
             column -= 1
@@ -73,6 +71,9 @@ def commandgen(imagenames, num_cols):
 
     return commands
 
+
+
+#Generate the json content for the manifest file
 def makemanifest(mainfilename):
     name = mainfilename + ' IMG Generator'
     uuid1 = str(uuid.uuid4())
@@ -98,17 +99,24 @@ def makemanifest(mainfilename):
     return manifestcontent
 
 
-
 #This will turn the commands into an mcfunction
-def functiongen(mainfilename, commands, max_commands_per_file=9750):
+def functiongen(mainfilename, commands):
+    max_commands_per_file=9750
+
     # Make the folders and manifest
     new_folder_path = os.path.join('functionpacks/', mainfilename)
     if not os.path.exists(new_folder_path):
         os.makedirs(new_folder_path)
+    
+    #Call manifest generation
     manifestcontent = makemanifest(mainfilename)
+
+    #Create manifest file and dump json data into it
     file_path = os.path.join(new_folder_path, 'manifest.json')
     with open(file_path, "w") as f:
         json.dump(manifestcontent, f, indent=2)
+    
+    #Create the "functions" folder
     folder_path = os.path.join(new_folder_path, 'functions')
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
@@ -116,6 +124,7 @@ def functiongen(mainfilename, commands, max_commands_per_file=9750):
     # Write the commands to one or more function files
     num_files = len(commands) // max_commands_per_file + 1
     for i in range(num_files):
+
         # Create a new function file with a suffix if needed
         filename = f"{mainfilename}_{i}.mcfunction"
         file_path = os.path.join(folder_path, filename)
@@ -127,7 +136,6 @@ def functiongen(mainfilename, commands, max_commands_per_file=9750):
             for command in commands[start_idx:end_idx]:
                 f.write(command + "\n")
 
-    
     print("The mcfunction file has been generated.")
 
 
