@@ -77,5 +77,5 @@ def get_closest_image(imagestoprocess):
             print("Processed " + str(b) + "/" + str(len(imagestoprocess)) + " Rows")
         b += 1
     print("Processed " + str(b-1) + "/" + str(len(imagestoprocess)) + " Rows")
-    print("Finished!")
+    print("Finished!, Yup")
     return processed_images, imagenames

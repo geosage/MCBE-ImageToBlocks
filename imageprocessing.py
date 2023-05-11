@@ -94,11 +94,3 @@ def combine_images(sub_images):
             combined_image.paste(sub_image, (col_idx * sub_image_size, row_idx * sub_image_size))
 
     return combined_image, num_rows, num_cols
-
-
-
-
-
-
-
-
