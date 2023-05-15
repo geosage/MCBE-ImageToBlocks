@@ -30,21 +30,21 @@ else:
 
 print(selected_basename)
 
-maxheight = 320
+maxheight = 320 #Max block height
 q = 1
 importquestion = True
 pixelsperblock = resize_and_save_image(maxheight)
 
-#Split Image
+#Split Image - imageprocessing.py
 imagestoprocess, columns = split_image('resizedimage.jpg', pixelsperblock)
 print(str(len(imagestoprocess) * len(imagestoprocess[0])) + ' images are being processed.')
 
 imagesnum = len(imagestoprocess) * len(imagestoprocess[0])
 
-#Get Closest Images
+#Get Closest Images - blockpicker.py
 processedimages, imagenames = get_closest_image(imagestoprocess)
 
-#Combine and Save Images
+#Combine and Save Images - imageprocessing.py
 feez, num_rows, num_cols = combine_images(processedimages)
 feez.save('finalimage.jpg')
 
@@ -53,7 +53,7 @@ print(str(columns) + ' Columns')
 #Open Image
 os.startfile('finalimage.jpg')
 
-#Import Image
+#Import Image - importmcbe.py
 wantimport = str(input("Your final image has been opened. Do you want to import it? (Yes/No)")).lower()
 while importquestion == True:
     if wantimport == "yes":

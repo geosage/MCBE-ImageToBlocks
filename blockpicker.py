@@ -40,7 +40,7 @@ def get_closest_image(imagestoprocess):
 
     imagenames = []
     processed_images = []
-    for row in imagestoprocess:
+    for row in imagestoprocess: #Sort through rows
         row_images = []
         for image in row:
             # Convert the query image from a list to a NumPy array
