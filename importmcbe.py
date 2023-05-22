@@ -51,28 +51,6 @@ def blockgen(imagenames):
 
     return imagenames
 
-#Makes the list of commands and appends it to the list "commands"
-def commandgen(imagenames, num_cols):
-    column = num_cols
-    row = 0
-    commands = []
-
-    commands.append(f'tickingarea add ~ ~ ~ ~ ~ ~{num_cols} imageimport')
-    for i in imagenames:
-        i = f'fill ~ ~{row} ~{column} ~ ~{row} ~{column} {i}'
-        if column == 1:
-            column = num_cols
-            row += 1
-        else:
-            column -= 1
-        commands.append(i)
-    
-    commands.append(f'tickingarea remove imageimport')
-
-    return commands
-
-
-
 #Generate the json content for the manifest file
 def makemanifest(mainfilename):
     name = mainfilename + ' IMG Generator'
@@ -140,36 +118,51 @@ def functiongen(mainfilename, commands):
 
 
 
-#Typing the commands into their chat
-def commandfill(commands):
-    print("Please open your minecraft...\nCommands will begin to be typed in 5 seconds.")
-    time.sleep(5)
-    a = 1
-    for i in commands:
-        print(f'Filled {a} block(s)')
-        time.sleep(1)
-        pyautogui.press('/')
-        time.sleep(0.05)
-        pyautogui.typewrite(i, interval=0.05)
-        time.sleep(0.05)
-        pyautogui.press('enter')
-        a += 1
-    print("Successfully entered commands!")
+#Makes the list of commands and appends it to the list "commands"
+def commandgen(blocknames, num_cols, direction):
+    column = num_cols
+    row = 0
+    commands = []
+
+    #copy and paste this shit below to do for +x -x +z and -z
+    commands.append(f'tickingarea add ~ ~ ~ ~ ~ ~{num_cols} imageimport')
+    for i in blocknames:
+        i = f'fill ~ ~{row} ~{column} ~ ~{row} ~{column} {i}'
+        if column == 1:
+            column = num_cols
+            row += 1
+        else:
+            column -= 1
+        commands.append(i)
+    
+    commands.append(f'tickingarea remove imageimport')
+
+    return commands
+
 
 
 #This will ask which import type they want
 def mcbequestion(imagenames, num_cols, mainfilename):
-    imagenames = blockgen(imagenames)
-    commands = commandgen(imagenames, num_cols)
-    importtype = input("How would you like to import?\n[1]: mcfunction\n[2]: fill commands (this takes a long time)\n")
+    #Convert to block names
+    blocknames = blockgen(imagenames)
 
+    #Ask question to find out if they want it to be upright or flat --------------------
+
+    #Ask which direction to be imported
     check = True
     while check == True:
-        if importtype == "1":
-            functiongen(mainfilename, commands)
+        try:
+            direction = int(input("Which direction would you like it to be imported?\n[1]: Positive X\n[2]: Positive Z\n[3]: Negative X\n[4]: Negative Z\n"))
             check = False
-        elif importtype == "2":
-            commandfill(commands)
-            check = False
+        except:
+            print("\nPlease pick 1, 2, 3 or 4")
+        
+        if direction == 1 or 2 or 3 or 4:
+            #Generates the command list
+            commands = commandgen(blocknames, num_cols, direction)
         else:
-            importtype = input("Please pick 1 or 2.")
+            print("\nPlease pick 1, 2, 3 or 4")
+
+
+    #Generates the function file
+    functiongen(mainfilename, commands)
