@@ -3,53 +3,7 @@ import time
 import os
 import json
 import uuid
-
-#This will generate the block names for the other methods
-def blockgen(imagenames):
-    count = 0
-    for i in imagenames:
-        i = i.replace('.png', '')
-        if i[:9] == "concrete ":
-            a = i.split()
-            b = a[1]
-            i = f'concrete ["color":"{b}"]'
-        elif i[:9] == "concrete_":
-            a = i.split()
-            b = a[1]
-            i = f'concrete_powder ["color":"{b}"]'
-        elif i[:9] == "stained_h":
-            a = i.split()
-            b = a[1]
-            i = f'stained_hardened_clay ["color":"{b}"]'
-        elif i[:3] == "log":
-            a = i.split()
-            b = a[1]
-            i = f'wood ["wood_type":"{b}"]'
-        elif i[:6] == "planks":
-            a = i.split()
-            b = a[1]
-            i = f'planks ["wood_type":"{b}"]'
-        elif i[:5] == "dpris":
-            i = f'prismarine ["prismarine_block_type":"dark"]'
-        elif i[:7] == "redsand":
-            a = i.split()
-            b = a[1]
-            i = f'red_sandstone ["sand_stone_type":"{b}"]'
-        elif i[:10] == "fsandstone":
-            a = i.split()
-            b = a[1]
-            i = f'sandstone ["sand_stone_type":"{b}"]'
-        elif i[:6] == "stonef":
-            a = i.split()
-            b = a[1]
-            i = f'stone ["stone_type":"{b}"]'
-
-        imagenames[count] = i
-        count += 1
-
-    imagenames = list(reversed(imagenames))
-
-    return imagenames
+from commandgen import *
 
 #Generate the json content for the manifest file
 def makemanifest(mainfilename):
@@ -124,17 +78,9 @@ def commandgen(blocknames, num_cols, direction):
     row = 0
     commands = []
 
-    #copy and paste this shit below to do for +x -x +z and -z
-    commands.append(f'tickingarea add ~ ~ ~ ~ ~ ~{num_cols} imageimport')
-    for i in blocknames:
-        i = f'fill ~ ~{row} ~{column} ~ ~{row} ~{column} {i}'
-        if column == 1:
-            column = num_cols
-            row += 1
-        else:
-            column -= 1
-        commands.append(i)
-    
+    #Positve Z axis
+    if direction == 3:
+        commands = positiveZ(blocknames, num_cols, commands)
     commands.append(f'tickingarea remove imageimport')
 
     return commands
@@ -146,7 +92,7 @@ def mcbequestion(imagenames, num_cols, mainfilename):
     #Convert to block names
     blocknames = blockgen(imagenames)
 
-    #Ask question to find out if they want it to be upright or flat --------------------
+    #Ask question to find out if they want it to be upright or flat ---------------------------
 
     #Ask which direction to be imported
     check = True
