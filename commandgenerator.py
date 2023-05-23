@@ -51,7 +51,23 @@ def blockgen(imagenames):
 
 
 #Generate the commands for the different directions
-def positiveZ(blocknames, num_cols, commands):
+def positiveX(blocknames, num_cols, commands = []):
+    row = 0
+    column = num_cols
+    commands.append(f'tickingarea add ~ ~ ~ ~{num_cols} ~ ~ imageimport')
+    for i in blocknames:
+        i = f'fill ~{column} ~{row} ~ ~{column} ~{row} ~ {i}'
+        if column == 1:
+            column = num_cols
+            row += 1
+        else:
+            column -= 1
+        commands.append(i)
+    return commands
+
+def positiveZ(blocknames, num_cols, commands = []):
+    row = 0
+    column = num_cols
     commands.append(f'tickingarea add ~ ~ ~ ~ ~ ~{num_cols} imageimport')
     for i in blocknames:
         i = f'fill ~ ~{row} ~{column} ~ ~{row} ~{column} {i}'

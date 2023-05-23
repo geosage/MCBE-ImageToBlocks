@@ -1,9 +1,7 @@
-import pyautogui
-import time
 import os
 import json
 import uuid
-from commandgen import *
+from commandgenerator import *
 
 #Generate the json content for the manifest file
 def makemanifest(mainfilename):
@@ -74,13 +72,16 @@ def functiongen(mainfilename, commands):
 
 #Makes the list of commands and appends it to the list "commands"
 def commandgen(blocknames, num_cols, direction):
-    column = num_cols
-    row = 0
-    commands = []
+
+    #Positive X axis
+    if direction == 1:
+        commands = positiveX(blocknames, num_cols)
 
     #Positve Z axis
-    if direction == 3:
-        commands = positiveZ(blocknames, num_cols, commands)
+    if direction == 2:
+        commands = positiveZ(blocknames, num_cols)
+
+    #Remove ticking area
     commands.append(f'tickingarea remove imageimport')
 
     return commands
@@ -98,16 +99,16 @@ def mcbequestion(imagenames, num_cols, mainfilename):
     check = True
     while check == True:
         try:
-            direction = int(input("Which direction would you like it to be imported?\n[1]: Positive X\n[2]: Positive Z\n[3]: Negative X\n[4]: Negative Z\n"))
+            direction = int(input("Which direction would you like it to be imported?\n[1]: Positive X\n[2]: Positive Z\n"))
             check = False
         except:
-            print("\nPlease pick 1, 2, 3 or 4")
+            print("\nPlease pick 1 or 2")
         
-        if direction == 1 or 2 or 3 or 4:
+        if direction == 1 or 2:
             #Generates the command list
             commands = commandgen(blocknames, num_cols, direction)
         else:
-            print("\nPlease pick 1, 2, 3 or 4")
+            print("\nPlease pick 1 or 2")
 
 
     #Generates the function file
