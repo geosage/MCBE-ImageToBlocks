@@ -1,6 +1,7 @@
 import os
 import json
 import uuid
+import zipfile
 from commandgenerator import *
 
 #Generate the json content for the manifest file
@@ -29,24 +30,23 @@ def makemanifest(mainfilename):
     return manifestcontent
 
 
-#This will turn the commands into an mcfunction
 def functiongen(mainfilename, commands):
-    max_commands_per_file=9750
+    max_commands_per_file = 9750
 
     # Make the folders and manifest
     new_folder_path = os.path.join('functionpacks/', mainfilename)
     if not os.path.exists(new_folder_path):
         os.makedirs(new_folder_path)
-    
-    #Call manifest generation
+
+    # Call manifest generation
     manifestcontent = makemanifest(mainfilename)
 
-    #Create manifest file and dump json data into it
+    # Create manifest file and dump json data into it
     file_path = os.path.join(new_folder_path, 'manifest.json')
     with open(file_path, "w") as f:
         json.dump(manifestcontent, f, indent=2)
-    
-    #Create the "functions" folder
+
+    # Create the "functions" folder
     folder_path = os.path.join(new_folder_path, 'functions')
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
@@ -58,7 +58,7 @@ def functiongen(mainfilename, commands):
         # Create a new function file with a suffix if needed
         filename = f"{mainfilename}_{i}.mcfunction"
         file_path = os.path.join(folder_path, filename)
-        
+
         # Write up to max_commands_per_file commands to the file
         start_idx = i * max_commands_per_file
         end_idx = (i + 1) * max_commands_per_file
@@ -66,7 +66,23 @@ def functiongen(mainfilename, commands):
             for command in commands[start_idx:end_idx]:
                 f.write(command + "\n")
 
-    print("The mcfunction file has been generated.")
+    # Create a zip file
+    zip_path = os.path.join('functionpacks/', f"{mainfilename}.zip")
+    with zipfile.ZipFile(zip_path, 'w') as zipf:
+        for root, dirs, files in os.walk(new_folder_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                zipf.write(file_path, os.path.relpath(file_path, new_folder_path))
+
+    # Change the file extension
+    renamed_zip_path = os.path.join('functionpacks/', f"{mainfilename}.zip")
+    renamed_zip_path = renamed_zip_path.replace('.zip', '.mcpack')
+    os.rename(zip_path, renamed_zip_path)
+
+    if os.name == 'nt':  # Windows
+        os.startfile('functionpacks')
+
+    print("The mcfunction file has been generated and zipped.")
 
 
 
