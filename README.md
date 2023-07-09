@@ -15,7 +15,7 @@ Before running the program, ensure that you have the following installed:
 1. Clone the repository to your local machine:
 
    ```bash
-   $ git clone https://github.com/your-username/your-repo.git
+   $ git clone https://github.com/geosage/MCBE-ImageToBlocks
    ```
 2. Install the required dependencies:
 
